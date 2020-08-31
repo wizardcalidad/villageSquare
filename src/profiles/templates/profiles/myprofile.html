@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}my profile{% endblock title %}
+
+{% block content %}
+<!--modal -->
+<div class="ui ">
+<!--  <i class="close icon"></i>-->
+<!--  <div class="header">-->
+<!--    Update your profile-->
+<!--  </div>-->
+<!--  <div class="image content">-->
+<!--    <div class="ui medium image">-->
+<!--      <img src="{{profile.avatar.url}}">-->
+<!--    </div>-->
+
+    <div class="ui segment">
+    {% if confirm %}
+        <div class="ui green message">Your profile has been updated</div>
+    {% endif %}
+        <h2>my profile: {{request.user}}</h2>
+      <div class="ui grid">
+      <div class="row">
+        <div class="six wide column">
+          <img class="ui medium rounded image" src="{{profile.avatar.url }}">
+          <div class="row mb-5">
+            <button class="ui secondary button" id="modal-btn">Update your profile</button>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="ten wide column">
+  <table class="ui table">
+    <tbody>
+    <tr>
+      <td>Username:</td>
+      <td>{{profile.user}}</td>
+    </tr>
+    <tr>
+      <td>Full Name:</td>
+      <td>{{profile.first_name}} {{profile.last_name}}</td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td> {{profile.email}}</td>
+    </tr>
+    <tr>
+      <td>Country:</td>
+      <td>{{profile.country}}</td>
+    </tr>
+    <tr>
+      <td>Biography:</td>
+      <td>{{profile.bio}}</td>
+    </tr>
+    <tr>
+      <td>Number of Friends:</td>
+      <td>
+        {{profile.get_friends_no}}
+      </td>
+    </tr>
+    <tr>
+        <td>Friends</td>
+        <td>
+          <ul>
+            {% for friend in profile.get_friends %}
+              <li>{{friend}}</li>
+
+            {% endfor %}
+
+          </ul>
+        </td>
+    </tr>
+    <tr>
+      <td>Number of posts:</td>
+      <td>{{profile.get_posts_no}}</td>
+    </tr>
+    <tr>
+      <td>Number of likes given:</td>
+      <td>{{profile.get_likes_given_no}}</td>
+    </tr>
+    <tr>
+      <td>Number of likes received:</td>
+      <td>{{profile.get_likes_received_no}}</td>
+  </tr>
+    </tbody>
+  </table>
+</div>
+  </div>
+
+    <hr><br>
+    <div class="description">
+      <div class="ui header">Provide additional information about you.</div>
+      <form action="" method="POST" class="modal mymodal ui positive button">Update
+        {% csrf_token %}
+          {{form.as_p}}
+
+        <div class="action">
+          <button type="submit" class="ui positive black right labeled icon button">
+              Update
+          </button>
+
+        </div>
+
+
+       </form>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
