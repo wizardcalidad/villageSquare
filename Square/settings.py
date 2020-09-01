@@ -28,7 +28,10 @@ SECRET_KEY = 'hi4)1#39d7((xc@s^*6sdc$q@5@19u-mdnt1si5so=58=2al)2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'https://localhost.127.0.0.1:8000/posts',
+    'https://square-calidad.herokuapp.com'
+]
 
 
 # Application definition
