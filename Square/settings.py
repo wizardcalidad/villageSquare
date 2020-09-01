@@ -30,7 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     #'https://localhost.127.0.0.1:8000/posts',
-    'https://square-calidad.herokuapp.com'
+    'square-calidad.herokuapp.com'
 ]
 
 
