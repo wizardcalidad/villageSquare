@@ -1,1 +1,1 @@
-web: gunicorn Fusion.wsgi --log-file -
+web: gunicorn Square.wsgi --log-file -
