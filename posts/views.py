@@ -12,14 +12,14 @@ from django.views.generic import UpdateView, DeleteView
 @login_required
 def post_comment_create_and_list_view(request):
     qs = Post.objects.all()
-    profile = Profile.objects.get(user=request.user)
+    # profile = Profile.objects.get(user=request.user)
 
-   #Post form, comment form
+    # Post form, comment form
     p_form = PostModelForm()
     c_form = CommentModelForm()
     post_added = False
 
-    profile = Profile.objects.get(user=request.user )
+    profile = Profile.objects.get(user=request.user)
 
     if 'submit_p_form' in request.POST:
         print(request.POST)
@@ -40,7 +40,6 @@ def post_comment_create_and_list_view(request):
             instance.save()
             c_form = CommentModelForm()
 
-
     context = {
         'qs': qs,
         'profile': profile,
@@ -54,7 +53,7 @@ def post_comment_create_and_list_view(request):
 
 def like_unlike_post(request):
     user = request.user
-    if request.method =='POST':
+    if request.method == 'POST':
         post_id = request.POST.get('post_id')
         post_obj = Post.objects.get(id=post_id)
         profile = Profile.objects.get(user=user)
@@ -67,17 +66,18 @@ def like_unlike_post(request):
         like, created = Like.objects.get_or_create(user=profile, post_id=post_id)
 
         if not created:
-            if like.value=='Like':
-                like.value='Unlike'
+            if like.value == 'Like':
+                like.value = 'Unlike'
             else:
-                like.value='Like'
+                like.value = 'Like'
         else:
-            like.value='Like'
+            like.value = 'Like'
 
             post_obj.save()
             like.save()
 
     return redirect('posts:main-post-view')
+
 
 class PostDeleteView(DeleteView):
     model = Post
@@ -91,6 +91,7 @@ class PostDeleteView(DeleteView):
             messages.warning(self.request, 'You need to be the author of the post to be able to delete it')
         return obj
 
+
 class PostUpdateView(UpdateView):
     form_class = PostModelForm
     model = Post
@@ -102,6 +103,5 @@ class PostUpdateView(UpdateView):
         if form.instance.author == profile:
             return super().form_valid(form)
         else:
-            form.add_error(None,"You need to be the author of the post to be able to update it")
+            form.add_error(None, "You need to be the author of the post to be able to update it")
             return super().form_invalid(form)
-
