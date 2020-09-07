@@ -19,7 +19,7 @@ def post_comment_create_and_list_view(request):
     c_form = CommentModelForm()
     post_added = False
 
-   # profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=request.user)
 
     if 'submit_p_form' in request.POST:
         p_form = PostModelForm(request.POST, request.FILES or None)
