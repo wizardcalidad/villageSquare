@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load semanticui %}
+
+
+{% block title %}Create an Account{% endblock %}
+{% block content %}
+   {% csrf_token %}
+<div class="ui grid">
+    <div class="row">
+         <div class="nine wide column push-down">
+        <img src="{% static 'register/image/front.jpg' %}"/>
+    </div>
+
+     <div class="two wide column">
+
+    </div>
+
+    <div class="five wide column push-down">
+
+<form class="ui form" method="POST">
+    {% csrf_token %}
+  <div class="field">
+<!--    <label>First Name</label>-->
+    <input class="form_style" type="text" name="first_name" placeholder="First Name">
+<!--      {% render_field my_form.field value='My Value' placeholder='Put your text here!' %}-->
+  </div>
+  <div class="field">
+<!--    <label>Last Name</label>-->
+    <input class="form_style" type="text" name="last_name" placeholder="Last Name">
+  </div>
+  <div class="field">
+<!--    <label>Username</label>-->
+    <input class="form_style" type="text" name="username" placeholder="username">
+  </div>
+   <div class="field">
+<!--    <label>Email</label>-->
+    <input class="form_style" type="email" name="email" placeholder="wz@square.com">
+  </div>
+  <div class="field">
+<!--    <label>Password</label>-->
+    <input class="form_style" type="password" name="password1" placeholder="password">
+  </div>
+  <div class="field">
+<!--    <label>Re-enter Password</label>-->
+    <input class="form_style" type="password" name="password2" placeholder="password again">
+  </div>
+  <div class="field">
+    <div class="ui checkbox">
+      <input type="checkbox" tabindex="0">
+      <label>I agree to the Terms and Conditions</label>
+    </div>
+  </div>
+    <p>Already have an account? <a href="{% url 'login' %}" >Login</a></p>
+  <button class="ui secondary button" type="submit">Register</button>
+    {% for message in messages %}
+    <h6>{{message}}</h6>
+    {% endfor %}
+</form>
+    </div>
+
+    </div>
+ </div>
+{% endblock content %}

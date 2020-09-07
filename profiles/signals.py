@@ -4,11 +4,11 @@ from django.dispatch import receiver
 from .models import Profile, Relationship
 
 
-@receiver(post_save, sender=User)
-def post_save_create_profile(sender, instance, created, **kwargs):
-    #print('sender', sender)
-    if created:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def post_save_create_profile(sender, instance, created, **kwargs):
+#     #print('sender', sender)
+#     if created:
+#         Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=Relationship)

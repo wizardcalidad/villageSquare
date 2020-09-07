@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .models import Post, Like
@@ -8,6 +9,7 @@ from django.views.generic import UpdateView, DeleteView
 
 
 # Create your views here.
+@login_required
 def post_comment_create_and_list_view(request):
     qs = Post.objects.all()
     profile = Profile.objects.get(user=request.user)

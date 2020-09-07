@@ -8,3 +8,6 @@ Posts
     -Like
 
 allauth(Authentication)
+    -Login
+    -SignUp
+    -Logout
