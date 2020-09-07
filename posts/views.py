@@ -22,8 +22,7 @@ def post_comment_create_and_list_view(request):
     profile = Profile.objects.get(user=request.user)
 
     if 'submit_p_form' in request.POST:
-        print(request.POST)
-        p_form = PostModelForm(request.POST, request.FILES)
+        p_form = PostModelForm(request.POST, request.FILES or None)
         if p_form.is_valid():
             instance = p_form.save(commit=False)
             instance.author = profile
