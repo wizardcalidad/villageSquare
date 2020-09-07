@@ -4,11 +4,11 @@ from django.dispatch import receiver
 from .models import Profile, Relationship
 
 
-# @receiver(post_save, sender=User)
-# def post_save_create_profile(sender, instance, created, **kwargs):
-#     #print('sender', sender)
-#     if created:
-#         Profile.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def post_save_create_profile(sender, instance, created, **kwargs):
+    print('sender', sender)
+    if created:
+        Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=Relationship)
@@ -20,6 +20,7 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
         receiver_.friends.add(sender_.user)
         sender_.save()
         receiver_.save()
+
 
 @receiver(pre_delete, sender=Relationship)
 def pre_delete_remove_from_friends(sender, instance, **kwargs):
