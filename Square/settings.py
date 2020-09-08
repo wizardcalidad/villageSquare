@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import cloudinary
 
 from pathlib import Path
-from decouple import config
+from . import config
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'profiles',
     'register',
     'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -136,15 +139,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static_project')
 ]
-# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
 MEDIA_URL = '/media/'
-#MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config("CLOUDINARY_CLOUD_NAME"),
-    'API_KEY': config("CLOUDINARY_API_KEY"),
-    'API_SECRET': config("CLOUDINARY_API_SECRET"),
-}
+
+
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': config("CLOUDINARY_CLOUD_NAME"),
+#     'API_KEY': config("CLOUDINARY_API_KEY"),
+#     'API_SECRET': config("CLOUDINARY_API_SECRET"),
+# }
 

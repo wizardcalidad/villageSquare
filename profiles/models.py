@@ -1,3 +1,7 @@
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
@@ -5,16 +9,18 @@ from django.shortcuts import reverse
 from .utils import get_random_code
 from django.template.defaultfilters import slugify
 from django.db.models import Q
+from cloudinary.models import CloudinaryField
+
+
 # Create your models here
 
-class ProfileManager(models.Manager):
 
+class ProfileManager(models.Manager):
     def get_all_profiles_to_invite(self, sender):
         profiles = Profile.objects.all().exclude(user=sender)
         profile = Profile.objects.get(user=sender)
         qs = Relationship.objects.filter(Q(sender=profile) | Q(receiver=profile))
         print(qs)
-
 
         accepted = set([])
         for rel in qs:
@@ -27,21 +33,23 @@ class ProfileManager(models.Manager):
         print(available)
         return available
 
-
     def get_all_profiles(self, me):
         profiles = Profile.objects.all().exclude(user=me)
         return profiles
 
+
 class Profile(models.Model):
-    first_name = models.CharField(max_length=200, blank= True)
-    last_name = models.CharField(max_length=200, blank= True)
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='no bio...', max_length=300)
     email = models.EmailField(max_length=200, blank=True)
-    country = models.CharField(max_length=200, blank= True)
-    avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
+    country = models.CharField(max_length=200, blank=True)
+    avatar = CloudinaryField('posts',
+                             validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'svg'])],
+                             default='avatar.png', blank=True)
     friends = models.ManyToManyField(User, blank=True, related_name='friends')
-    slug = models.SlugField(unique=True, blank=False)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -69,7 +77,7 @@ class Profile(models.Model):
         likes = self.like_set.all()
         total_liked = 0
         for item in likes:
-            if item.value=='Like':
+            if item.value == 'Like':
                 total_liked += 1
         return total_liked
 
@@ -77,7 +85,7 @@ class Profile(models.Model):
         posts = self.posts.all()
         total_liked = 0
         for item in posts:
-             total_liked += item.liked.all().count()
+            total_liked += item.liked.all().count()
         return total_liked
 
     __initial_first_name = None
@@ -88,11 +96,11 @@ class Profile(models.Model):
         self.__initial_first_name = self.first_name
         self.__Initial_last_name = self.last_name
 
-
     def save(self, *args, **kwargs):
         ex = False
         to_slug = self.slug
-        if  self.first_name !=self.__initial_first_name or self.last_name!=self.__Initial_last_name or self.slug=="":
+        if self.first_name != self.__initial_first_name or self.last_name != self.__Initial_last_name or self.slug == "":
+
             if self.first_name and self.last_name:
                 to_slug = slugify(str(self.first_name) + " " + str(self.last_name))
                 ex = Profile.objects.filter(slug=to_slug).exists()
@@ -104,10 +112,12 @@ class Profile(models.Model):
         self.slug = to_slug
         super().save(*args, **kwargs)
 
+
 STATUS_CHOICES = (
     ('send', 'send'),
     ('accepted', 'accepted')
 )
+
 
 class RelationshipManager(models.Manager):
     def invitations_received(self, receiver):
@@ -115,11 +125,10 @@ class RelationshipManager(models.Manager):
         return qs
 
 
-
 class Relationship(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
-    status = models.CharField(max_length= 8, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
